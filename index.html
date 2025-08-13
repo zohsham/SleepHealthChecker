@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sleep Health Checker | Sleep Duration Calculator & Wellness Tool</title>
+<meta name="description" content="Free Sleep Health Checker - Calculate your sleep duration, get personalized tips, and improve your bedtime habits for better health." />
+
+<!-- Favicon as base64 PNG -->
+<link rel="icon" type="image/png" href="favicon.png" />
+
+<!-- Google AdSense Script -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<style>
+  /* Reset some defaults */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background-color: #111827;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 1rem;
+    line-height: 1.5;
+  }
+
+  .container {
+    background: #1f2937;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-bottom: 2rem;
+  }
+  .container.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  h1, h2, h3 {
+    margin-top: 0;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  label {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+  }
+
+  input[type="time"] {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    background: #374151;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    transition: background-color 0.2s ease;
+  }
+  input[type="time"]:focus {
+    outline: 2px solid #0284c7;
+    background: #2563eb;
+  }
+
+  button {
+    background: #0284c7;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1.1rem;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    transition: filter 0.2s ease;
+  }
+  button:hover,
+  button:focus {
+    filter: brightness(1.15);
+    outline: none;
+  }
+
+  /* About button inside container */
+  .about-btn {
+    background: #374151;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    border: none;
+    margin-bottom: 1.25rem;
+    transition: background-color 0.2s ease;
+  }
+  .about-btn:hover,
+  .about-btn:focus {
+    background: #4b5563;
+    outline: none;
+  }
+
+  .link-btn {
+    background: none;
+    border: none;
+    color: #38bdf8;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    display: inline-block;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+  .link-btn:hover,
+  .link-btn:focus {
+    color: #60a5fa;
+    outline: none;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  /* Responsive Typography */
+  @media (max-width: 480px) {
+    body {
+      padding: 1rem 0.5rem;
+    }
+
+    .container {
+      padding: 1.25rem 1.5rem;
+      max-width: 100%;
+      border-radius: 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+    h2 {
+      font-size: 1.1rem;
+    }
+    h3 {
+      font-size: 1rem;
+    }
+
+    input[type="time"] {
+      font-size: 0.95rem;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 0.6rem 1rem;
+    }
+
+    .btn-row {
+      gap: 0.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Home Page -->
+<div id="homePage" class="container show" role="main" aria-label="Sleep Health Checker Home Page">
+  <!-- About button inside container, above main content -->
+  <button class="about-btn" id="aboutBtn" aria-label="About Sleep Health Checker">About</button>
+
+  <h1>Sleep Health Checker – Free Sleep Duration & Quality Calculator</h1>
+  <h2>Track your bedtime, wake time, and get healthy sleep tips</h2>
+
+  <!-- Google Ad (Top) -->
+  <ins class="adsbygoogle"
+       style="display:block; text-align:center;"
+       data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+       data-ad-slot="1111111111"
+       data-ad-format="auto"
+       data-full-width-responsive="true" aria-label="Advertisement"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <form id="sleepForm" aria-label="Sleep Duration Calculator Form">
+    <div>
+      <label for="sleepTime">Sleep Time</label>
+      <input type="time" id="sleepTime" name="sleepTime" required aria-required="true" />
+    </div>
+    <div>
+      <label for="wakeTime">Wake Time</label>
+      <input type="time" id="wakeTime" name="wakeTime" required aria-required="true" />
+    </div>
+    <button type="submit">Check Health</button>
+  </form>
+</div>
+
+<!-- Result Page -->
+<div id="resultPage" class="container" style="display:none;" role="region" aria-live="polite" aria-label="Sleep Result Report">
+  <h2>Your Sleep Report</h2>
+  <p id="resultStatus" style="font-weight:bold;"></p>
+  <p id="resultHours"></p>
+  <p id="resultSuggestion"></p>
+
+  <!-- Google Ad (Bottom) -->
+  <ins class="adsbygoogle"
+       style="display:block; text-align:center;"
+       data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+       data-ad-slot="2222222222"
+       data-ad-format="auto"
+       data-full-width-responsive="true" aria-label="Advertisement"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <button id="goBack">Go Back</button>
+</div>
+
+<!-- About Page -->
+<div id="aboutPage" class="container" style="display:none;" role="region" aria-label="About Sleep Health Checker">
+  <button class="about-btn" id="aboutBackBtn" aria-label="Back to Home">Back</button>
+
+  <h1>About Sleep Health Checker</h1>
+  <h2>Healthy Sleep App & Wellness Tool</h2>
+
+  <h3>Sleep Quality Calculator</h3>
+  <h3>Sleep Time Analyzer</h3>
+  <h3>Sleep Improvement Tool</h3>
+  <h3>Bedtime & Wake Time Guide</h3>
+  <h3>Sleep Schedule Optimizer</h3>
+  <h3>Sleep Tracker Web App</h3>
+  <h3>Sleep Wellness Tool</h3>
+  <h3>Online Sleep Advisor</h3>
+
+  <p>
+    Sleep Health Checker is a <strong>free online tool</strong> designed to help you track and improve your sleeping patterns.
+    Whether you struggle with insomnia, irregular bedtimes, or just want to make sure you’re getting enough rest,
+    this tool provides quick and reliable insights.
+    Enter your bedtime and wake-up time to instantly calculate your total sleep duration and get personalized recommendations.
+  </p>
+
+  <h2>Developer Bio</h2>
+  <p>
+    Created by <strong>Muhammad Zohaib Ehtisham</strong>, a dedicated web developer focused on building simple,
+    practical, and highly usable tools that blend technology with well-being.
+  </p>
+
+  <h2>Terms & Conditions</h2>
+  <p>
+    This application is for informational purposes only and is not a substitute for professional medical advice.
+    Misuse, data tampering, or using the app for unlawful activities is strictly prohibited.
+  </p>
+
+  <div class="btn-row">
+    <button class="link-btn" id="privacyBtn">Privacy Policy</button>
+  </div>
+</div>
+
+<!-- Privacy Page -->
+<div id="privacyPage" class="container" style="display:none;" role="region" aria-label="Privacy Policy">
+  <button class="about-btn" id="privacyBackBtn" aria-label="Back to About">Back</button>
+
+  <h1>Privacy Policy – Sleep Health Checker</h1>
+  <p>
+    We respect your privacy and are committed to protecting your personal information. This application:
+  </p>
+  <ul>
+    <li>Does not collect, store, or share any personal data.</li>
+    <li>Performs all calculations locally on your device – no data is sent to any server.</li>
+    <li>Does not use cookies, trackers, or analytics tools.</li>
+    <li>Is designed solely for informational and educational purposes.</li>
+  </ul>
+  <p>
+    By using this application, you acknowledge that your sleep information is processed only within your browser
+    and that you are solely responsible for how you interpret and act upon the recommendations provided.
+    If you have a medical condition affecting your sleep, please consult a qualified healthcare professional.
+  </p>
+  <p>
+    This policy may be updated in the future to reflect improvements in the app’s features or security measures.
+    Continued use after any updates will signify your acceptance of the revised policy.
+  </p>
+</div>
+
+<script>
+  const pages = {
+    home: document.getElementById('homePage'),
+    result: document.getElementById('resultPage'),
+    about: document.getElementById('aboutPage'),
+    privacy: document.getElementById('privacyPage')
+  };
+
+  function showPage(pageName) {
+    for (const key in pages) {
+      pages[key].style.display = 'none';
+      pages[key].classList.remove('show');
+    }
+    pages[pageName].style.display = 'block';
+    setTimeout(() => pages[pageName].classList.add('show'), 50);
+  }
+
+  document.getElementById('aboutBtn').onclick = () => showPage('about');
+  document.getElementById('aboutBackBtn').onclick = () => showPage('home');
+  document.getElementById('privacyBtn').onclick = () => showPage('privacy');
+  document.getElementById('privacyBackBtn').onclick = () => showPage('about');
+  document.getElementById('goBack').onclick = () => showPage('home');
+
+  document.getElementById('sleepForm').onsubmit = function (e) {
+    e.preventDefault();
+
+    const sleepTime = document.getElementById('sleepTime').value;
+    const wakeTime = document.getElementById('wakeTime').value;
+    if (!sleepTime || !wakeTime) return;
+
+    const sleepDate = new Date(`1970-01-01T${sleepTime}:00`);
+    let wakeDate = new Date(`1970-01-01T${wakeTime}:00`);
+    if (wakeDate <= sleepDate) {
+      wakeDate.setDate(wakeDate.getDate() + 1);
+    }
+
+    const diffHours = (wakeDate - sleepDate) / (1000 * 60 * 60);
+    let status = "";
+    let suggestion = "";
+
+    function formatTime(date) {
+      return date.toTimeString().slice(0, 5);
+    }
+    function addHours(date, hours) {
+      const d = new Date(date);
+      d.setHours(d.getHours() + hours);
+      return d;
+    }
+
+    if (diffHours >= 7 && diffHours <= 9) {
+      status = "✅ Great! You got healthy sleep.";
+      suggestion = "Keep maintaining this sleep schedule.";
+    } else if (diffHours < 7) {
+      status = "⚠️ You didn't get enough sleep.";
+      const needMore = (7 - diffHours).toFixed(1);
+      suggestion = `Try sleeping ${needMore} more hours, e.g., from ${formatTime(addHours(wakeDate, -7))} to ${formatTime(wakeDate)}.`;
+    } else {
+      status = "⚠️ You might be oversleeping.";
+      const reduceBy = (diffHours - 9).toFixed(1);
+      suggestion = `Try reducing your sleep by ${reduceBy} hours, e.g., from ${formatTime(addHours(wakeDate, -9))} to ${formatTime(wakeDate)}.`;
+    }
+
+    suggestion += " Ideal range: 22:00–06:00 for best health.";
+
+    document.getElementById('resultStatus').textContent = status;
+    document.getElementById('resultHours').textContent = `You slept for ${diffHours.toFixed(1)} hours.`;
+    document.getElementById('resultSuggestion').textContent = `Suggestion: ${suggestion}`;
+
+    showPage('result');
+  };
+</script>
+
+</body>
+</html>
